@@ -1184,6 +1184,17 @@ export const StrokeStyleDottedIcon = createIcon(
   tablerIconProps,
 );
 
+export const StrokeStyleZigzagIcon = createIcon(
+  <g strokeWidth="2">
+    <path
+      d="m1.23,15.83l4.6,-8.59l5.22,8.49l4.43,-8.54l5.34,8.64"
+      fill="none"
+      stroke="currentColor"
+    />
+  </g>,
+  tablerIconProps,
+);
+
 export const SloppinessArchitectIcon = createIcon(
   <path
     d="M2.5 12.038c1.655-.885 5.9-3.292 8.568-4.354 2.668-1.063.101 2.821 1.32 3.104 1.218.283 5.112-1.814 5.112-1.814"

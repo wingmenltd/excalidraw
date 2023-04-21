@@ -14,6 +14,7 @@ import {
   ArrowheadNoneIcon,
   StrokeStyleDashedIcon,
   StrokeStyleDottedIcon,
+  StrokeStyleZigzagIcon,
   TextAlignTopIcon,
   TextAlignBottomIcon,
   TextAlignMiddleIcon,
@@ -494,6 +495,11 @@ export const actionChangeStrokeStyle = register({
             value: "dotted",
             text: t("labels.strokeStyle_dotted"),
             icon: StrokeStyleDottedIcon,
+          },
+          {
+            value: "zigzag",
+            text: "Zig zag",
+            icon: StrokeStyleZigzagIcon,
           },
         ]}
         value={getFormValue(

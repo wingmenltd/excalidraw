@@ -561,7 +561,59 @@ const generateElementShape = (
 
         // points array can be empty in the beginning, so it is important to add
         // initial position to it
-        const points = element.points.length ? element.points : [[0, 0]];
+        let points = element.points.length ? element.points : [[0, 0]];
+
+        if (points.length > 1 && element.strokeStyle === "zigzag") {
+          const newPoints = [];
+          function invertAngle(angle: number) {
+            return (angle + Math.PI / 2) % (2 * Math.PI);
+          }
+
+          for (let i = 0; i < points.length; i++) {
+            // First point we don't do do anything
+            if (i === 0) {
+              continue;
+            }
+
+            // From second point onwards, we create new zigzag points between them
+            const from = points[i - 1];
+            const to = points[i];
+            const lineRadians = Math.atan2(to[1] - from[1], to[0] - from[0]);
+            const lineRadiansAdjusted = invertAngle(-lineRadians);
+            const a = from[0] - to[0];
+            const b = from[1] - to[1];
+            const lineLength = Math.sqrt(a * a + b * b);
+            const zigzagWavelength = 10;
+            const zigzagAmplitued = 6;
+            const lineStraightEnd = 25;
+            const zigzagLength = lineLength - lineStraightEnd;
+            const zigzagSteps = Math.floor(zigzagLength / zigzagWavelength);
+
+            // Add the starting point
+            newPoints.push(from);
+            const zigzagEndpoint = [
+              from[0] + zigzagLength * Math.sin(lineRadiansAdjusted),
+              from[1] + zigzagLength * Math.cos(lineRadiansAdjusted),
+            ];
+
+            // Generate zigzag steps between from/to
+            let side = 1;
+            for (let j = 1; j <= zigzagSteps; j++) {
+              const x =
+                from[0] + j * zigzagWavelength * Math.sin(lineRadiansAdjusted);
+              const y =
+                from[1] + j * zigzagWavelength * Math.cos(lineRadiansAdjusted);
+              newPoints.push([
+                x + side * zigzagAmplitued * Math.cos(lineRadiansAdjusted),
+                y - side * zigzagAmplitued * Math.sin(lineRadiansAdjusted),
+              ]);
+              side *= -1;
+            }
+            newPoints.push(zigzagEndpoint);
+            newPoints.push(to);
+          }
+          points = newPoints as any;
+        }
 
         // curve is always the first element
         // this simplifies finding the curve for an element
