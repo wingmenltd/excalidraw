@@ -1195,6 +1195,29 @@ export const StrokeStyleZigzagIcon = createIcon(
   tablerIconProps,
 );
 
+export const StrokeStyleDoubleIcon = createIcon(
+  <g strokeWidth="2">
+    <line
+      fill="none"
+      stroke="#000000"
+      transform="matrix(1, 0, 0, 1, 0, 0)"
+      x1="2.24"
+      x2="21.95"
+      y1="5.76"
+      y2="5.86"
+    />
+    <line
+      fill="none"
+      stroke="#000000"
+      x1="2.24"
+      x2="21.95"
+      y1="14.05"
+      y2="14.14"
+    />
+  </g>,
+  tablerIconProps,
+);
+
 export const SloppinessArchitectIcon = createIcon(
   <path
     d="M2.5 12.038c1.655-.885 5.9-3.292 8.568-4.354 2.668-1.063.101 2.821 1.32 3.104 1.218.283 5.112-1.814 5.112-1.814"

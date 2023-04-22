@@ -584,7 +584,7 @@ const generateElementShape = (
             const b = from[1] - to[1];
             const lineLength = Math.sqrt(a * a + b * b);
             const zigzagWavelength = 10;
-            const zigzagAmplitued = 6;
+            const zigzagAmplitude = 6;
             const lineStraightEnd = 25;
             const zigzagLength = lineLength - lineStraightEnd;
             const zigzagSteps = Math.floor(zigzagLength / zigzagWavelength);
@@ -604,14 +604,78 @@ const generateElementShape = (
               const y =
                 from[1] + j * zigzagWavelength * Math.cos(lineRadiansAdjusted);
               newPoints.push([
-                x + side * zigzagAmplitued * Math.cos(lineRadiansAdjusted),
-                y - side * zigzagAmplitued * Math.sin(lineRadiansAdjusted),
+                x + side * zigzagAmplitude * Math.cos(lineRadiansAdjusted),
+                y - side * zigzagAmplitude * Math.sin(lineRadiansAdjusted),
               ]);
               side *= -1;
             }
             newPoints.push(zigzagEndpoint);
             newPoints.push(to);
           }
+          points = newPoints as any;
+        } else if (points.length > 1 && element.strokeStyle === "double") {
+          // @ts-ignore
+          function getLineExtensionPoint(point1, point2, extensionDistance) {
+            const [x1, y1] = point1;
+            const [x2, y2] = point2;
+
+            const dx = x2 - x1;
+            const dy = y2 - y1;
+            const length = Math.sqrt(dx * dx + dy * dy);
+
+            const x3 = x2 + (dx / length) * extensionDistance;
+            const y3 = y2 + (dy / length) * extensionDistance;
+
+            return [x3, y3];
+          }
+
+          // @ts-ignore
+          function createDoubleLine(point1, point2, shiftDistance) {
+            const [x1, y1] = point1;
+            const [x2, y2] = point2;
+
+            const dx = x2 - x1;
+            const dy = y2 - y1;
+            const length = Math.sqrt(dx * dx + dy * dy);
+            const shiftX = (shiftDistance * dy) / length;
+            const shiftY = (shiftDistance * dx) / length;
+
+            const line1Point1 = [x1 + shiftX, y1 - shiftY];
+            const line1Point2 = [x2 + shiftX, y2 - shiftY];
+            const line2Point1 = [x1 - shiftX, y1 + shiftY];
+            const line2Point2 = [x2 - shiftX, y2 + shiftY];
+
+            return [
+              line1Point1,
+              line1Point2,
+              line2Point2,
+              line2Point1,
+              line2Point2,
+            ];
+          }
+
+          // @ts-ignore
+          const newPoints = [];
+          for (let i = 0; i < points.length; i++) {
+            // First point we don't do do anything
+            if (i === 0) {
+              continue;
+            }
+
+            const from = points[i - 1];
+            const to = points[i];
+
+            const doublelinePoints = createDoubleLine(from, to, 4);
+            newPoints.push(...doublelinePoints);
+
+            // Last point, add the extension for the arrow
+            if (i === points.length - 1) {
+              const extensionPoint = getLineExtensionPoint(from, to, 20);
+              newPoints.push(to);
+              newPoints.push(extensionPoint);
+            }
+          }
+          // @ts-ignore
           points = newPoints as any;
         }
 

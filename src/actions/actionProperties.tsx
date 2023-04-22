@@ -15,6 +15,7 @@ import {
   StrokeStyleDashedIcon,
   StrokeStyleDottedIcon,
   StrokeStyleZigzagIcon,
+  StrokeStyleDoubleIcon,
   TextAlignTopIcon,
   TextAlignBottomIcon,
   TextAlignMiddleIcon,
@@ -498,8 +499,13 @@ export const actionChangeStrokeStyle = register({
           },
           {
             value: "zigzag",
-            text: "Zig zag",
+            text: "Zig zag", // TODO: Use translate
             icon: StrokeStyleZigzagIcon,
+          },
+          {
+            value: "double",
+            text: "Tuplaviiva", // TODO: Use translate
+            icon: StrokeStyleDoubleIcon,
           },
         ]}
         value={getFormValue(
