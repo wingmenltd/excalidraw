@@ -630,6 +630,24 @@ const generateElementShape = (
           }
 
           // @ts-ignore
+          function createLPoint(points, distance) {
+            const [x1, y1] = points[0];
+            const [x2, y2] = points[1];
+            const dx = x2 - x1;
+            const dy = y2 - y1;
+            const length = Math.sqrt(dx ** 2 + dy ** 2);
+            const ux = dx / length;
+            const uy = dy / length;
+
+            // compute the third point at a specified distance from the line
+            const x3 = x2 + distance * uy;
+            const y3 = y2 - distance * ux;
+
+            // return the L point
+            return [x3, y3];
+          }
+
+          // @ts-ignore
           function createDoubleLine(point1, point2, shiftDistance) {
             const [x1, y1] = point1;
             const [x2, y2] = point2;
@@ -645,12 +663,18 @@ const generateElementShape = (
             const line2Point1 = [x1 - shiftX, y1 + shiftY];
             const line2Point2 = [x2 - shiftX, y2 + shiftY];
 
+            const arrowTipPoint = getLineExtensionPoint(point1, point2, 20);
+            const arrowSide1 = createLPoint([line1Point1, line1Point2], 8);
+            const arrowSide2 = createLPoint([line2Point1, line2Point2], -8);
+
             return [
               line1Point1,
               line1Point2,
+              arrowSide1,
+              arrowTipPoint,
+              arrowSide2,
               line2Point2,
               line2Point1,
-              line2Point2,
             ];
           }
 
@@ -667,13 +691,6 @@ const generateElementShape = (
 
             const doublelinePoints = createDoubleLine(from, to, 4);
             newPoints.push(...doublelinePoints);
-
-            // Last point, add the extension for the arrow
-            if (i === points.length - 1) {
-              const extensionPoint = getLineExtensionPoint(from, to, 20);
-              newPoints.push(to);
-              newPoints.push(extensionPoint);
-            }
           }
           // @ts-ignore
           points = newPoints as any;
@@ -694,7 +711,7 @@ const generateElementShape = (
         }
 
         // add lines only in arrow
-        if (element.type === "arrow") {
+        if (element.type === "arrow" && element.strokeStyle !== "double") {
           const { startArrowhead = null, endArrowhead = "arrow" } = element;
 
           const getArrowheadShapes = (
