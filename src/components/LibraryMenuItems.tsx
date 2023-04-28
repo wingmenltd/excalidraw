@@ -138,6 +138,8 @@ const LibraryMenuItems = ({
     );
   };
 
+  // ----------------------
+
   const renderLibrarySection = (
     items: (
       | LibraryItem
@@ -147,51 +149,107 @@ const LibraryMenuItems = ({
         }
     )[],
   ) => {
-    const _items = items.map((item) => {
-      if (item.id) {
-        return createLibraryItemCompo({
-          item,
-          onClick: () => onInsertLibraryItems(getInsertedElements(item.id)),
-          key: item.id,
+    // TEMP: Add random section to items
+    // items.forEach((item) => {
+    //   // @ts-ignore
+    //   item.section = Math.floor(Math.random() * 3) + "_Section ";
+    // });
+
+    const sections = items.reduce((acc, item) => {
+      // @ts-ignore
+      if (!acc[item.section]) {
+        // @ts-ignore
+        acc[item.section] = [];
+      }
+      // @ts-ignore
+      acc[item.section].push(item);
+      return acc;
+    }, {} as { [key: string]: typeof items });
+
+    // return Object.keys(sections).map((section) => {
+    //   const _items = sections[section].map((item) => {
+    //     if (item.id) {
+    //       return createLibraryItemCompo({
+    //         item,
+    //         onClick: () => onInsertLibraryItems(getInsertedElements(item.id)),
+    //         key: item.id,
+    //       });
+    //     }
+    //     return createLibraryItemCompo({
+    //       key: "__pending__item__",
+    //       item,
+    //       onClick: () => onAddToLibrary(pendingElements),
+    //     });
+    //   });
+    //   return (
+    //     <div className="LibraryMenuItems__section">
+    //       <div className="LibraryMenuItems__section-title">{section}</div>
+    //       <Stack.Row gap={1}>{_items}</Stack.Row>
+    //     </div>
+    //   );
+    // });
+
+    return Object.keys(sections)
+      .sort((a, b) => {
+        const aNumber = parseInt(a.split("_")[0]);
+        const bNumber = parseInt(b.split("_")[0]);
+        return aNumber - bNumber;
+      })
+      .map((section, sectionIndex) => {
+        const _items = sections[section].map((item) => {
+          if (item.id) {
+            return createLibraryItemCompo({
+              item,
+              onClick: () => onInsertLibraryItems(getInsertedElements(item.id)),
+              key: item.id,
+            });
+          }
+          return createLibraryItemCompo({
+            key: "__pending__item__",
+            item,
+            onClick: () => onAddToLibrary(pendingElements),
+          });
         });
-      }
-      return createLibraryItemCompo({
-        key: "__pending__item__",
-        item,
-        onClick: () => onAddToLibrary(pendingElements),
-      });
-    });
 
-    // ensure we render all empty cells if no items are present
-    let rows = chunk(_items, CELLS_PER_ROW);
-    if (!rows.length) {
-      rows = [[]];
-    }
+        // ensure we render all empty cells if no items are present
+        let rows = chunk(_items, CELLS_PER_ROW);
+        if (!rows.length) {
+          rows = [[]];
+        }
 
-    return rows.map((rowItems, index, rows) => {
-      if (index === rows.length - 1) {
-        // pad row with empty cells
-        rowItems = rowItems.concat(
-          new Array(CELLS_PER_ROW - rowItems.length)
-            .fill(null)
-            .map((_, index) => {
-              return createLibraryItemCompo({
-                key: `empty_${index}`,
-                item: null,
-              });
-            }),
+        const _rows = rows.map((rowItems, index, rows) => {
+          if (index === rows.length - 1) {
+            // pad row with empty cells
+            rowItems = rowItems.concat(
+              new Array(CELLS_PER_ROW - rowItems.length)
+                .fill(null)
+                .map((_, index) => {
+                  return createLibraryItemCompo({
+                    key: `empty_${index}`,
+                    item: null,
+                  });
+                }),
+            );
+          }
+          return (
+            <Stack.Row
+              align="center"
+              key={index}
+              className="library-menu-items-container__row"
+            >
+              {rowItems}
+            </Stack.Row>
+          );
+        });
+        return (
+          <div key={sectionIndex} className="LibraryMenuItems__section">
+            <div className="LibraryMenuItems__section-title">
+              {section.split("_")[1]}
+            </div>
+            {_rows}
+          </div>
         );
-      }
-      return (
-        <Stack.Row
-          align="center"
-          key={index}
-          className="library-menu-items-container__row"
-        >
-          {rowItems}
-        </Stack.Row>
-      );
-    });
+      });
   };
 
   const unpublishedItems = libraryItems.filter(
