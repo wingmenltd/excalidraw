@@ -153,6 +153,10 @@ const LibraryMenuItems = ({
     // items.forEach((item) => {
     //   // @ts-ignore
     //   item.section = Math.floor(Math.random() * 3) + "_Section ";
+    //   item.elements.forEach((element) => {
+    //     // @ts-ignore
+    //     element.customData = { noResize: true };
+    //   });
     // });
 
     const sections = items.reduce((acc, item) => {
@@ -165,29 +169,6 @@ const LibraryMenuItems = ({
       acc[item.section].push(item);
       return acc;
     }, {} as { [key: string]: typeof items });
-
-    // return Object.keys(sections).map((section) => {
-    //   const _items = sections[section].map((item) => {
-    //     if (item.id) {
-    //       return createLibraryItemCompo({
-    //         item,
-    //         onClick: () => onInsertLibraryItems(getInsertedElements(item.id)),
-    //         key: item.id,
-    //       });
-    //     }
-    //     return createLibraryItemCompo({
-    //       key: "__pending__item__",
-    //       item,
-    //       onClick: () => onAddToLibrary(pendingElements),
-    //     });
-    //   });
-    //   return (
-    //     <div className="LibraryMenuItems__section">
-    //       <div className="LibraryMenuItems__section-title">{section}</div>
-    //       <Stack.Row gap={1}>{_items}</Stack.Row>
-    //     </div>
-    //   );
-    // });
 
     return Object.keys(sections)
       .sort((a, b) => {

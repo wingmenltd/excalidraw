@@ -4399,6 +4399,8 @@ class App extends React.Component<AppProps, AppState> {
         lastCommittedPoint: multiElement.points[multiElement.points.length - 1],
       });
       setCursor(this.canvas, CURSOR_TYPE.POINTER);
+      // WM-CHANGE: Finalize arrow on every click
+      this.actionManager.executeAction(actionFinalize);
     } else {
       const [gridX, gridY] = getGridPoint(
         pointerDownState.origin.x,
@@ -6270,6 +6272,15 @@ class App extends React.Component<AppProps, AppState> {
       this.scene.getNonDeletedElements(),
       this.state,
     );
+
+    // WM-CHANGE: disable resizing for elements with customData.noResize set to true
+    const isResizeDisabled = selectedElements.some((element) => {
+      return element.customData?.noResize;
+    });
+    if (isResizeDisabled && pointerDownState.resize.handleType !== "rotation") {
+      return false;
+    }
+
     const transformHandleType = pointerDownState.resize.handleType;
     this.setState({
       // TODO: rename this state field to "isScaling" to distinguish
