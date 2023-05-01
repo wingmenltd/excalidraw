@@ -150,14 +150,15 @@ const LibraryMenuItems = ({
     )[],
   ) => {
     // TEMP: Add random section to items
-    // items.forEach((item) => {
-    //   // @ts-ignore
-    //   item.section = Math.floor(Math.random() * 3) + "_Section ";
-    //   item.elements.forEach((element) => {
-    //     // @ts-ignore
-    //     element.customData = { noResize: true };
-    //   });
-    // });
+    // WM-CHANGE: Applying noResize flag for library items
+    items.forEach((item) => {
+      // @ts-ignore
+      // item.section = Math.floor(Math.random() * 3) + "_Section ";
+      item.elements.forEach((element) => {
+        // @ts-ignore
+        element.customData = { noResize: true };
+      });
+    });
 
     const sections = items.reduce((acc, item) => {
       // @ts-ignore

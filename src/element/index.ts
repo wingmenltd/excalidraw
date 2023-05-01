@@ -26,6 +26,7 @@ export {
 
 export {
   OMIT_SIDES_FOR_MULTIPLE_ELEMENTS,
+  OMIT_RESIZE, // WM-CHANGE: Omit resize completely for specific (i.e. library) selections
   getTransformHandlesFromCoords,
   getTransformHandles,
 } from "./transformHandles";

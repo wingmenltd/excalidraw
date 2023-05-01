@@ -14,6 +14,7 @@ import {
 import {
   getElementAbsoluteCoords,
   OMIT_SIDES_FOR_MULTIPLE_ELEMENTS,
+  OMIT_RESIZE,
   getTransformHandlesFromCoords,
   getTransformHandles,
   getElementBounds,
@@ -586,12 +587,15 @@ export const _renderScene = ({
       context.save();
       context.translate(renderConfig.scrollX, renderConfig.scrollY);
 
+      // WM-CHANGE: omitting resize handles completely for library items
+      const omitResize = locallySelectedElements.some(e => e.customData?.noResize);
       if (locallySelectedElements.length === 1) {
         context.fillStyle = oc.white;
         const transformHandles = getTransformHandles(
           locallySelectedElements[0],
           renderConfig.zoom,
           "mouse", // when we render we don't know which pointer type so use mouse
+          omitResize // WM-CHANGE: omitting resize handles completely for library items
         );
         if (!appState.viewModeEnabled && showBoundingBox) {
           renderTransformHandles(
@@ -628,7 +632,7 @@ export const _renderScene = ({
           0,
           renderConfig.zoom,
           "mouse",
-          OMIT_SIDES_FOR_MULTIPLE_ELEMENTS,
+          omitResize ? OMIT_RESIZE : OMIT_SIDES_FOR_MULTIPLE_ELEMENTS, // WM-CHANGE: omitting resize handles completely for library items
         );
         if (locallySelectedElements.some((element) => !element.locked)) {
           renderTransformHandles(context, renderConfig, transformHandles, 0);
