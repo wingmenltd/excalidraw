@@ -128,7 +128,7 @@ const rotateResizeCursor = (cursor: string, angle: number) => {
 export const getCursorForResizingElement = (resizingElement: {
   element?: ExcalidrawElement;
   transformHandleType: MaybeTransformHandleType;
-}): string => {
+}, disableResizeCursor?: boolean): string => { // WM-CHANGE: Disable resize cursor for library items
   const { element, transformHandleType } = resizingElement;
   const shouldSwapCursors =
     element && Math.sign(element.height) * Math.sign(element.width) === -1;
@@ -167,5 +167,6 @@ export const getCursorForResizingElement = (resizingElement: {
     cursor = rotateResizeCursor(cursor, element.angle);
   }
 
-  return cursor ? `${cursor}-resize` : "";
+  // WM-CHANGE: Disable resize cursor for library items
+  return (cursor && !disableResizeCursor) ? `${cursor}-resize` : "";
 };

@@ -3200,6 +3200,8 @@ class App extends React.Component<AppProps, AppState> {
     const elements = this.scene.getNonDeletedElements();
 
     const selectedElements = getSelectedElements(elements, this.state);
+    // WM-CHANGE: Disable resize cursor for library items
+    const disableResizeCursor = selectedElements.some(e => e.customData?.noResize);
     if (
       selectedElements.length === 1 &&
       !isOverScrollBar &&
@@ -3219,7 +3221,7 @@ class App extends React.Component<AppProps, AppState> {
       ) {
         setCursor(
           this.canvas,
-          getCursorForResizingElement(elementWithTransformHandleType),
+          getCursorForResizingElement(elementWithTransformHandleType, disableResizeCursor), // WM-CHANGE: Disable resize cursor for library items
         );
         return;
       }
@@ -3236,7 +3238,7 @@ class App extends React.Component<AppProps, AppState> {
           this.canvas,
           getCursorForResizingElement({
             transformHandleType,
-          }),
+          }, disableResizeCursor), // WM-CHANGE: Disable resize cursor for library items
         );
         return;
       }
