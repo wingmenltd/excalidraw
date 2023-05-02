@@ -156,7 +156,10 @@ const LibraryMenuItems = ({
       // item.section = Math.floor(Math.random() * 3) + "_Section ";
       item.elements.forEach((element) => {
         // @ts-ignore
-        element.customData = { noResize: true };
+        if (element.section && (/^\d+_.*/).test(element.section)) {
+          // @ts-ignore
+          element.customData = { noResize: true };
+        }
       });
     });
 
