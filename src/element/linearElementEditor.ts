@@ -191,6 +191,8 @@ export class LinearElementEditor {
     if (!linearElementEditor) {
       return false;
     }
+    // WM-CHANGE: Force disabling mutate dragging for all elements
+    if (1) return false;
     const { selectedPointsIndices, elementId } = linearElementEditor;
     const element = LinearElementEditor.getElement(elementId);
     if (!element) {

@@ -149,11 +149,9 @@ const LibraryMenuItems = ({
         }
     )[],
   ) => {
-    // TEMP: Add random section to items
     // WM-CHANGE: Applying noResize flag for library items
     items.forEach((item) => {
       // @ts-ignore
-      // item.section = Math.floor(Math.random() * 3) + "_Section ";
       item.elements.forEach((element) => {
         // @ts-ignore
         if (element.section && (/^\d+_.*/).test(element.section)) {
