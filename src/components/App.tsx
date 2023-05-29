@@ -4661,6 +4661,12 @@ class App extends React.Component<AppProps, AppState> {
           return;
         }
 
+        // WM-CHANGE: Get selected elements to enable drag blocking for NK library items
+        const selectedElements = getSelectedElements(
+          this.scene.getNonDeletedElements(),
+          this.state,
+        );
+
         const didDrag = LinearElementEditor.handlePointDragging(
           event,
           this.state,
@@ -4673,6 +4679,7 @@ class App extends React.Component<AppProps, AppState> {
             );
           },
           linearElementEditor,
+          selectedElements // WM-CHANGE: Enabling drag mutate blocking for NK library items
         );
         if (didDrag) {
           pointerDownState.lastCoords.x = pointerCoords.x;

@@ -187,12 +187,15 @@ export class LinearElementEditor {
       pointSceneCoords: { x: number; y: number }[],
     ) => void,
     linearElementEditor: LinearElementEditor,
+    selectedElements?: any // WM-CHANGE: Used for identifying NK library items
   ): boolean {
     if (!linearElementEditor) {
       return false;
     }
-    // WM-CHANGE: Force disabling mutate dragging for all elements
-    if (1) return false;
+    // WM-CHANGE: Force disabling mutate dragging for NK library elements
+    if (selectedElements && selectedElements.some((e: any) => e.customData?.noResize)) {
+      return false;
+    }
     const { selectedPointsIndices, elementId } = linearElementEditor;
     const element = LinearElementEditor.getElement(elementId);
     if (!element) {
