@@ -97,9 +97,10 @@ export const SelectedShapeActions = ({
       )}
       {showFillIcons && renderAction("changeFillStyle")}
 
-      {(hasStrokeWidth(appState.activeTool.type) ||
+      {/* WM-CHANGE: Stroke width not needed */}
+      {/* {(hasStrokeWidth(appState.activeTool.type) ||
         targetElements.some((element) => hasStrokeWidth(element.type))) &&
-        renderAction("changeStrokeWidth")}
+        renderAction("changeStrokeWidth")} */}
 
       {(appState.activeTool.type === "freedraw" ||
         targetElements.some((element) => element.type === "freedraw")) &&
@@ -109,14 +110,16 @@ export const SelectedShapeActions = ({
         targetElements.some((element) => hasStrokeStyle(element.type))) && (
         <>
           {renderAction("changeStrokeStyle")}
-          {renderAction("changeSloppiness")}
+          {/* WM-CHANGE: Stroke sloppiness not needed */}
+          {/* {renderAction("changeSloppiness")} */}
         </>
       )}
 
-      {(canChangeRoundness(appState.activeTool.type) ||
+      {/* WM-CHANGE: Roundness not needed */}
+      {/* {(canChangeRoundness(appState.activeTool.type) ||
         targetElements.some((element) => canChangeRoundness(element.type))) && (
         <>{renderAction("changeRoundness")}</>
-      )}
+      )} */}
 
       {(hasText(appState.activeTool.type) ||
         targetElements.some((element) => hasText(element.type))) && (
@@ -137,7 +140,8 @@ export const SelectedShapeActions = ({
         <>{renderAction("changeArrowhead")}</>
       )}
 
-      {renderAction("changeOpacity")}
+      {/* WM-CHANGE: Opacity not needed */}
+      {/* {renderAction("changeOpacity")} */}
 
       <fieldset>
         <legend>{t("labels.layers")}</legend>

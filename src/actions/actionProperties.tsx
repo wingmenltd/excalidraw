@@ -492,11 +492,11 @@ export const actionChangeStrokeStyle = register({
             text: t("labels.strokeStyle_dashed"),
             icon: StrokeStyleDashedIcon,
           },
-          {
-            value: "dotted",
-            text: t("labels.strokeStyle_dotted"),
-            icon: StrokeStyleDottedIcon,
-          },
+          // { // WM-CHANGE: Dotted not needed
+          //   value: "dotted",
+          //   text: t("labels.strokeStyle_dotted"),
+          //   icon: StrokeStyleDottedIcon,
+          // },
           {
             value: "zigzag",
             text: "Zig zag", // TODO: Use translate
