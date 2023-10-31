@@ -698,16 +698,24 @@ const generateElementShape = (
 
         // curve is always the first element
         // this simplifies finding the curve for an element
-        if (!element.roundness) {
-          if (options.fill) {
-            shape = [generator.polygon(points as [number, number][], options)];
-          } else {
-            shape = [
-              generator.linearPath(points as [number, number][], options),
-            ];
-          }
+
+        // WM Changes: double line needs to be always sharp
+        if (element.strokeStyle === "double") {
+          shape = [generator.linearPath(points as [number, number][], options)];
         } else {
-          shape = [generator.curve(points as [number, number][], options)];
+          if (!element.roundness) {
+            if (options.fill) {
+              shape = [
+                generator.polygon(points as [number, number][], options),
+              ];
+            } else {
+              shape = [
+                generator.linearPath(points as [number, number][], options),
+              ];
+            }
+          } else {
+            shape = [generator.curve(points as [number, number][], options)];
+          }
         }
 
         // add lines only in arrow
