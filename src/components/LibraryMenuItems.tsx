@@ -149,18 +149,6 @@ const LibraryMenuItems = ({
         }
     )[],
   ) => {
-    // WM-CHANGE: Applying noResize flag for library items
-    items.forEach((item) => {
-      // @ts-ignore
-      item.elements.forEach((element) => {
-        // @ts-ignore
-        if (element.section && (/^\d+_.*/).test(element.section)) {
-          // @ts-ignore
-          element.customData = { noResize: true };
-        }
-      });
-    });
-
     const sections = items.reduce((acc, item) => {
       // @ts-ignore
       if (!acc[item.section]) {

@@ -1641,9 +1641,18 @@ class App extends React.Component<AppProps, AppState> {
       }),
     );
 
+    // WM-CHANGE: If insertToBottom data under customData of the element is set
+    // we insert the element to the bottom of the stack
+    const elementsToBottom = newElements.filter(
+      (element) => element.customData?.insertToBottom,
+    );
+    const elementsToTop = newElements.filter(
+      (element) => !element.customData?.insertToBottom,
+    );
     const nextElements = [
+      ...elementsToBottom,
       ...this.scene.getElementsIncludingDeleted(),
-      ...newElements,
+      ...elementsToTop,
     ];
 
     this.scene.replaceAllElements(nextElements);
@@ -3203,7 +3212,9 @@ class App extends React.Component<AppProps, AppState> {
 
     const selectedElements = getSelectedElements(elements, this.state);
     // WM-CHANGE: Disable resize cursor for library items
-    const disableResizeCursor = selectedElements.some(e => e.customData?.noResize);
+    const disableResizeCursor = selectedElements.some(
+      (e) => e.customData?.noResize,
+    );
     if (
       selectedElements.length === 1 &&
       !isOverScrollBar &&
@@ -3223,7 +3234,10 @@ class App extends React.Component<AppProps, AppState> {
       ) {
         setCursor(
           this.canvas,
-          getCursorForResizingElement(elementWithTransformHandleType, disableResizeCursor), // WM-CHANGE: Disable resize cursor for library items
+          getCursorForResizingElement(
+            elementWithTransformHandleType,
+            disableResizeCursor,
+          ), // WM-CHANGE: Disable resize cursor for library items
         );
         return;
       }
@@ -3238,9 +3252,12 @@ class App extends React.Component<AppProps, AppState> {
       if (transformHandleType) {
         setCursor(
           this.canvas,
-          getCursorForResizingElement({
-            transformHandleType,
-          }, disableResizeCursor), // WM-CHANGE: Disable resize cursor for library items
+          getCursorForResizingElement(
+            {
+              transformHandleType,
+            },
+            disableResizeCursor,
+          ), // WM-CHANGE: Disable resize cursor for library items
         );
         return;
       }
@@ -4679,7 +4696,7 @@ class App extends React.Component<AppProps, AppState> {
             );
           },
           linearElementEditor,
-          selectedElements // WM-CHANGE: Enabling drag mutate blocking for NK library items
+          selectedElements, // WM-CHANGE: Enabling drag mutate blocking for NK library items
         );
         if (didDrag) {
           pointerDownState.lastCoords.x = pointerCoords.x;
