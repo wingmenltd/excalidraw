@@ -149,6 +149,11 @@ export const actionUngroup = register({
   name: "ungroup",
   trackEvent: { category: "element" },
   perform: (elements, appState) => {
+    if (elements.some((element) => element?.customData?.noResize)) {
+      /* WM-CHANGES: Do not ungroup if we have a library item selected  */
+      return { appState, elements, commitToHistory: false };
+    }
+
     const groupIds = getSelectedGroupIds(appState);
     if (groupIds.length === 0) {
       return { appState, elements, commitToHistory: false };

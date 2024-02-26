@@ -107,13 +107,15 @@ export const SelectedShapeActions = ({
         renderAction("changeStrokeShape")}
 
       {(hasStrokeStyle(appState.activeTool.type) ||
-        targetElements.some((element) => hasStrokeStyle(element.type))) && (
-        <>
-          {renderAction("changeStrokeStyle")}
-          {/* WM-CHANGE: Stroke sloppiness not needed */}
-          {/* {renderAction("changeSloppiness")} */}
-        </>
-      )}
+        targetElements.some((element) => hasStrokeStyle(element.type))) &&
+        // WM-CHANGE: Don't allow changing line style of noResize elements (i.e. library elements)
+        !targetElements.some((element) => element?.customData?.noResize) && (
+          <>
+            {renderAction("changeStrokeStyle")}
+            {/* WM-CHANGE: Stroke sloppiness not needed */}
+            {/* {renderAction("changeSloppiness")} */}
+          </>
+        )}
 
       {/* WM-CHANGE: Roundness not needed */}
       {/* {(canChangeRoundness(appState.activeTool.type) ||
