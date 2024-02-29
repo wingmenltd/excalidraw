@@ -470,7 +470,9 @@ const generateElementShape = (
 
     switch (element.type) {
       case "rectangle":
-        if (element.roundness) {
+        // WM Changes: Disabled roundness for rectangle for now, so
+        // rectangles are always sharp
+        if (false && element.roundness) {
           const w = element.width;
           const h = element.height;
           const r = getCornerRadius(Math.min(w, h), element);
