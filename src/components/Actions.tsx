@@ -204,7 +204,8 @@ export const SelectedShapeActions = ({
             {!device.isMobile && renderAction("duplicateSelection")}
             {!device.isMobile && renderAction("deleteSelectedElements")}
             {renderAction("group")}
-            {renderAction("ungroup")}
+            {!targetElements.some((element) => element?.customData?.noResize) &&
+              renderAction("ungroup")}
             {showLinkIcon && renderAction("hyperlink")}
           </div>
         </fieldset>
