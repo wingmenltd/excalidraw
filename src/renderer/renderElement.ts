@@ -414,7 +414,10 @@ export const generateRoughOptions = (
     // calculate them (and we don't want the fills to be modified)
     fillWeight: element.strokeWidth / 2,
     hachureGap: element.strokeWidth * 4,
-    roughness: element.roughness,
+    roughness:
+      element?.customData?.roughnessOverride != null
+        ? element?.customData?.roughnessOverride
+        : element.roughness,
     stroke: element.strokeColor,
     preserveVertices: continuousPath,
   };
